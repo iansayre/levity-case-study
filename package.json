@@ -1,7 +1,7 @@
 {
   "name": "levity-case-study",
   "version": "0.1.0",
-  "private": false,
+  "private": true,
   "author": "Ian Sayre",
   "description": "Front-End assessment challenge for Levity",
   "dependencies": {
