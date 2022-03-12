@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
-import { GITHUB_TOKEN } from './constants';
 import { getRepos } from './queries';
 import SearchField from './components/SearchField';
 import TableComponent from './components/TableComponent';
@@ -9,6 +8,8 @@ import './App.css';
 
 function App() {
   const API_ENDPOINT = 'https://api.github.com/graphql';
+  // PASTE YOUR OWN PERSONAL ACCESS TOKEN HERE
+  const GITHUB_TOKEN = '';
 
   const [username, setUsername] = useState('');
   const [userRepos, setUserRepos] = useState([]);
