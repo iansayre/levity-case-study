@@ -1,4 +1,3 @@
-import react from 'react';
 import PropTypes from 'prop-types';
 import {
   Table,
@@ -9,7 +8,7 @@ import {
   TableRow,
 } from '@mui/material';
 
-const TableComponent = ({ repos }) => {
+const TableComponent = ({ userRepos }) => {
   const tableHeaders = ['Name', 'Description', 'Stars'];
 
   const printStars = (numberOfStars) => {
@@ -35,7 +34,7 @@ const TableComponent = ({ repos }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {repos.map((repo) => (
+          {userRepos.map((repo) => (
             <TableRow key={repo.id}>
               <TableCell>{repo.name}</TableCell>
               <TableCell>{repo.description}</TableCell>
@@ -56,12 +55,14 @@ const TableComponent = ({ repos }) => {
 };
 
 TableComponent.props = {
-  repos: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
-    description: PropTypes.string,
-    stargazerCount: PropTypes.number,
-  }),
+  userRepos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      description: PropTypes.string,
+      stargazerCount: PropTypes.number,
+    })
+  ),
 };
 
 export default TableComponent;

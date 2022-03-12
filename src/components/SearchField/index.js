@@ -1,4 +1,3 @@
-import react from 'react';
 import PropTypes from 'prop-types';
 import { Button, Grid, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material';
@@ -17,7 +16,7 @@ const SearchField = ({ handleSubmit, handleUsernameChange, username }) => {
           />
         </Grid>
         <Grid item xs={4}>
-          <Button type="submit" startIcon={<SearchIcon />}>
+          <Button type="submit" endIcon={<SearchIcon />}>
             Search
           </Button>
         </Grid>

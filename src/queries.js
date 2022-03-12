@@ -1,5 +1,5 @@
-export const getRepos = (userName, totalPerPage = 10) => `query () {
-	user(login: ${userName}) {
+export const getRepos = (username, totalPerPage = 10) => `query () {
+	user(login: ${username}) {
     repositories(first: ${totalPerPage}) {
       edges {
         node {
