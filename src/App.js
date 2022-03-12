@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
-import { API_ENDPOINT, GITHUB_TOKEN } from './constants';
+import { GITHUB_TOKEN } from './constants';
 import { getRepos } from './queries';
 import SearchField from './components/SearchField';
 import TableComponent from './components/TableComponent';
@@ -8,6 +8,8 @@ import TableComponent from './components/TableComponent';
 import './App.css';
 
 function App() {
+  const API_ENDPOINT = 'https://api.github.com/graphql';
+
   const [username, setUsername] = useState('');
   const [userRepos, setUserRepos] = useState([]);
 
@@ -16,18 +18,22 @@ function App() {
   const handleSearch = (event) => {
     event.preventDefault();
 
+    console.log(getRepos(username));
+
     fetch(API_ENDPOINT, {
+      mode: 'no-cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authentication: `bearer ${GITHUB_TOKEN}`,
+        Authorization: `bearer ${GITHUB_TOKEN}`,
       },
-      body: {
+      body: JSON.stringify({
         query: getRepos(username),
-      },
+      }),
     })
       .then((res) => {
-        const userRepos = res.formData.user.repositories.edges;
+        console.log({ data: res.data });
+        const userRepos = res.data.user.repositories.edges;
 
         setUserRepos(
           userRepos.sort((a, b) => b.stargazerCount - a.stargazerCount)

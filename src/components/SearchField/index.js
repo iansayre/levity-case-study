@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Button, Grid, TextField } from '@mui/material';
-import SearchIcon from '@mui/icons-material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const SearchField = ({ handleSubmit, handleUsernameChange, username }) => {
   return (
