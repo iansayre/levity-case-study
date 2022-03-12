@@ -3,6 +3,7 @@ export const getRepos = (userName, totalPerPage = 10) => `query () {
     repositories(first: ${totalPerPage}) {
       edges {
         node {
+          id
           name
           description
           stargazerCount
