@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Grid, Typography } from '@mui/material';
-import { getRepos } from './queries';
+import { getOrgRepos, getUserRepos } from './queries';
 import SearchField from './components/SearchField';
 import TableComponent from './components/TableComponent';
 
@@ -14,22 +14,17 @@ function App() {
   const [username, setUsername] = useState('');
   const [userRepos, setUserRepos] = useState([]);
 
-  const handleUsernameChange = (event) => setUsername(event.target.value);
-
-  const handleSearch = (event) => {
-    event.preventDefault();
-
-    console.log(getRepos(username));
-
+  const fetchOrgRepo = () => {
     fetch(API_ENDPOINT, {
       mode: 'no-cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
         Authorization: `bearer ${GITHUB_TOKEN}`,
       },
       body: JSON.stringify({
-        query: getRepos(username),
+        query: getOrgRepos(username),
       }),
     })
       .then((res) => {
@@ -40,13 +35,54 @@ function App() {
           userRepos.sort((a, b) => b.stargazerCount - a.stargazerCount)
         );
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+      });
   };
+
+  const fetchUserRepo = () => {
+    console.log(getUserRepos(username));
+
+    fetch(API_ENDPOINT, {
+      mode: 'no-cors',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: `bearer ${GITHUB_TOKEN}`,
+      },
+      body: JSON.stringify({
+        query: getUserRepos(username),
+      }),
+    })
+      .then((res) => {
+        console.log({ data: res.data });
+        const userRepos = res.data.user.repositories.edges;
+
+        setUserRepos(
+          userRepos.sort((a, b) => b.stargazerCount - a.stargazerCount)
+        );
+      })
+      .catch((err) => {
+        console.error(err);
+        // fallback and query for an organization instead of a user
+        fetchOrgRepo();
+      });
+  };
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+
+    fetchUserRepo();
+  };
+
+  const handleUsernameChange = (event) => setUsername(event.target.value);
+
   return (
     <div className="App">
       <Grid container columnSpacing={3} rowSpacing={2}>
         <Grid item xs={12}>
-          <Typography component="div" variant="h2">
+          <Typography align="left" component="div" variant="h4">
             Github Star Search
           </Typography>
         </Grid>
