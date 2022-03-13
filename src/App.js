@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { useMediaQuery } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 import { Grid, Typography } from '@mui/material';
 import { getOrgRepos, getUserRepos } from './queries';
+import { blue, deepPurple, pink, purple } from '@mui/material/colors';
 import SearchField from './components/SearchField';
 import TableComponent from './components/TableComponent';
-
-import './App.css';
 
 function App() {
   const API_ENDPOINT = 'https://api.github.com/graphql';
@@ -13,6 +15,20 @@ function App() {
 
   const [username, setUsername] = useState('');
   const [userRepos, setUserRepos] = useState([]);
+
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark');
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? 'dark' : 'light',
+          primary: prefersDarkMode ? deepPurple : blue,
+          secondary: prefersDarkMode ? pink : purple,
+        },
+      }),
+    [prefersDarkMode]
+  );
 
   const fetchOrgRepo = () => {
     fetch(API_ENDPOINT, {
@@ -27,9 +43,10 @@ function App() {
         query: getOrgRepos(username),
       }),
     })
-      .then((res) => {
-        console.log({ data: res.data });
-        const userRepos = res.data.user.repositories.edges;
+      .then((res) => res.json())
+      .then((json) => {
+        console.log({ data: json.data });
+        const userRepos = json.data.user.repositories.edges;
 
         setUserRepos(
           userRepos.sort((a, b) => b.stargazerCount - a.stargazerCount)
@@ -55,9 +72,10 @@ function App() {
         query: getUserRepos(username),
       }),
     })
-      .then((res) => {
-        console.log({ data: res.data });
-        const userRepos = res.data.user.repositories.edges;
+      .then((res) => res.json())
+      .then((json) => {
+        console.log({ data: json.data });
+        const userRepos = json.data.user.repositories.edges;
 
         setUserRepos(
           userRepos.sort((a, b) => b.stargazerCount - a.stargazerCount)
@@ -79,25 +97,28 @@ function App() {
   const handleUsernameChange = (event) => setUsername(event.target.value);
 
   return (
-    <div className="App">
-      <Grid container columnSpacing={3} rowSpacing={2}>
-        <Grid item xs={12}>
-          <Typography align="left" component="div" variant="h4">
-            Github Star Search
-          </Typography>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div className="App">
+        <Grid container columnSpacing={3} rowSpacing={2}>
+          <Grid item xs={12}>
+            <Typography align="left" component="div" variant="h4">
+              Github Star Search
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <SearchField
+              handleUsernameChange={handleUsernameChange}
+              handleSubmit={handleSearch}
+              username={username}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TableComponent userRepos={userRepos} />
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <SearchField
-            handleUsernameChange={handleUsernameChange}
-            handleSubmit={handleSearch}
-            username={username}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TableComponent userRepos={userRepos} />
-        </Grid>
-      </Grid>
-    </div>
+      </div>
+    </ThemeProvider>
   );
 }
 
