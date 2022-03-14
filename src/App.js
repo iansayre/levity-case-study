@@ -35,6 +35,8 @@ function App() {
   );
 
   const fetchOrgRepo = () => {
+    console.log(getOrgRepos(username));
+
     fetch(API_ENDPOINT, {
       mode: 'no-cors',
       method: 'POST',

@@ -2,6 +2,10 @@
 
 Front-End assessment challenge for Levity
 
+## Github Personal Access Key
+
+The Github api requires a personal access key to fetch data from their GraphQL endpoint. You can paste your own on line 18 of `App.js`. If you don't have any Github personal access keys, you can follow [these steps](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) to create one.
+
 ## Available Scripts
 
 In the project directory, you can run:
