@@ -103,6 +103,7 @@ function App() {
       <Box
         sx={{
           backgroundColor: theme.palette.primary.main,
+          color: 'white',
           boxShadow: 1,
           padding: '5px 20px',
           width: '100%',
