@@ -8,15 +8,25 @@ const SearchField = ({ handleSubmit, handleUsernameChange, username }) => {
       <Grid container spacing={3}>
         <Grid item xs={8}>
           <TextField
+            fullWidth
             id="username-textfield"
             label="username"
             onChange={handleUsernameChange}
             size="normal"
             value={username}
+            variant="standard"
           />
         </Grid>
-        <Grid item xs={4}>
-          <Button type="submit" endIcon={<SearchIcon />}>
+        <Grid
+          item
+          xs={4}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Button endIcon={<SearchIcon />} type="submit" variant="contained">
             Search
           </Button>
         </Grid>

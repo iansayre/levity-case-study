@@ -1,8 +1,12 @@
 import { useMemo, useState } from 'react';
-import { useMediaQuery } from '@mui/material';
+import {
+  Box,
+  CssBaseline,
+  Grid,
+  Typography,
+  useMediaQuery,
+} from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { CssBaseline } from '@mui/material';
-import { Grid, Typography } from '@mui/material';
 import { getOrgRepos, getUserRepos } from './queries';
 import { blue, deepPurple, pink, purple } from '@mui/material/colors';
 import SearchField from './components/SearchField';
@@ -99,13 +103,20 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <div className="App">
+      <Box
+        sx={{
+          backgroundColor: theme.palette.primary.main,
+          boxShadow: 1,
+          padding: '5px 20px',
+          width: '100%',
+        }}
+      >
+        <Typography align="left" component="div" variant="h4">
+          Github Star Search
+        </Typography>
+      </Box>
+      <Box sx={{ margin: '20px auto', width: '80%' }}>
         <Grid container columnSpacing={3} rowSpacing={2}>
-          <Grid item xs={12}>
-            <Typography align="left" component="div" variant="h4">
-              Github Star Search
-            </Typography>
-          </Grid>
           <Grid item xs={12}>
             <SearchField
               handleUsernameChange={handleUsernameChange}
@@ -117,7 +128,7 @@ function App() {
             <TableComponent userRepos={userRepos} />
           </Grid>
         </Grid>
-      </div>
+      </Box>
     </ThemeProvider>
   );
 }
