@@ -27,7 +27,7 @@ const TableComponent = ({ userRepos }) => {
         <TableHead>
           <TableRow>
             {tableHeaders.map((header) => (
-              <TableCell align="right" key={header}>
+              <TableCell align="left" key={header}>
                 {header}
               </TableCell>
             ))}
@@ -36,9 +36,9 @@ const TableComponent = ({ userRepos }) => {
         <TableBody>
           {userRepos.map((repo) => (
             <TableRow key={repo.id}>
-              <TableCell>{repo.name}</TableCell>
-              <TableCell>{repo.description}</TableCell>
-              <TableCell>
+              <TableCell align="left">{repo.name}</TableCell>
+              <TableCell align="left">{repo.description}</TableCell>
+              <TableCell align="left">
                 {/* {print individual stars if total is under 6 else print ⭐️xN. if no stars print nothing} */}
                 {repo.stargazerCount === 0
                   ? ''
