@@ -71,7 +71,6 @@ function App() {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log({ data: json.data });
         if (json.data.user) {
           const userRepos = json.data.user.repositories.edges;
           setUserRepos(
