@@ -35,15 +35,11 @@ function App() {
   );
 
   const fetchOrgRepo = () => {
-    console.log(getOrgRepos(username));
-
     fetch(API_ENDPOINT, {
-      mode: 'no-cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        Authorization: `bearer ${GITHUB_TOKEN}`,
+        Authorization: `Bearer ${GITHUB_TOKEN}`,
       },
       body: JSON.stringify({
         query: getOrgRepos(username),
@@ -51,11 +47,10 @@ function App() {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log({ data: json.data });
-        const userRepos = json.data.user.repositories.edges;
+        const orgRepos = json.data.organization.repositories.edges;
 
         setUserRepos(
-          userRepos.sort((a, b) => b.stargazerCount - a.stargazerCount)
+          orgRepos.sort((a, b) => b.node.stargazerCount - a.node.stargazerCount)
         );
       })
       .catch((err) => {
@@ -64,15 +59,11 @@ function App() {
   };
 
   const fetchUserRepo = () => {
-    console.log(getUserRepos(username));
-
     fetch(API_ENDPOINT, {
-      mode: 'no-cors',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        Authorization: `bearer ${GITHUB_TOKEN}`,
+        Authorization: `Bearer ${GITHUB_TOKEN}`,
       },
       body: JSON.stringify({
         query: getUserRepos(username),
@@ -81,16 +72,20 @@ function App() {
       .then((res) => res.json())
       .then((json) => {
         console.log({ data: json.data });
-        const userRepos = json.data.user.repositories.edges;
-
-        setUserRepos(
-          userRepos.sort((a, b) => b.stargazerCount - a.stargazerCount)
-        );
+        if (json.data.user) {
+          const userRepos = json.data.user.repositories.edges;
+          setUserRepos(
+            userRepos.sort(
+              (a, b) => b.node.stargazerCount - a.node.stargazerCount
+            )
+          );
+        } else {
+          // fallback and query for an organization instead of a user
+          fetchOrgRepo();
+        }
       })
       .catch((err) => {
         console.error(err);
-        // fallback and query for an organization instead of a user
-        fetchOrgRepo();
       });
   };
 
